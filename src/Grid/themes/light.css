@@ -1,0 +1,7 @@
+.my-grid.theme-light {
+  --grid-bg: #ffffff;
+  --grid-text: #000000;
+  --grid-border: #ddd;
+  --grid-header-bg: #f5f5f5;
+  --grid-row-hover: #f0f0f0;
+}

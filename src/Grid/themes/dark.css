@@ -1,0 +1,7 @@
+.my-grid.theme-dark {
+  --grid-bg: #1e1e1e;
+  --grid-text: #f0f0f0;
+  --grid-border: #ddd;
+  --grid-header-bg: #2a2a2a;
+  --grid-row-hover: #2f2f2f;
+}

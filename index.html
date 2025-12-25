@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="grid"></div>
+
+<script type="module">
+   import { MyGrid, GRID_THEMES } from "./useComponents.js";
+
+  // Todo en una sola llamada
+  
+// MyGrid.setTheme("dark");
+
+MyGrid.create({
+  target: "#grid",
+  columns: [
+    { field: "name", label: "Nombre" },
+    { field: "url", label: "URL" }
+  ],
+  url: "https://pokeapi.co/api/v2/pokemon",
+  mapResponse: r => r.results,
+  // theme: GRID_THEMES.LIGHT
+  // theme: GRID_THEMES.MATERIAL
+  theme: GRID_THEMES.DARK
+});
+</script>
+
+
+
+</body>
+</html>
