@@ -1,20 +1,48 @@
 .my-grid {
   --grid-bg: #ffffff;
   --grid-text: #000000;
-  --grid-border: #333;
+  --grid-border: #ccc;
   --grid-header-bg: #f5f5f5;
+  --grid-row-alt-bg: #fafafa;
   --grid-row-hover: #f0f0f0;
 
   font-family: system-ui, sans-serif;
   background: var(--grid-bg);
   color: var(--grid-text);
   border: 1px solid var(--grid-border);
+  border-collapse: collapse; /* importante para bordes limpios */
+  width: 100%;
 }
 
+/* Encabezados */
 .my-grid th {
   background: var(--grid-header-bg);
+  font-weight: bold;
+  padding: 10px 12px;
+  border: 1px solid var(--grid-border);
+  text-align: left;
 }
 
-.my-grid tr:hover td {
-  background: var(--grid-row-hover);
+/* Celdas */
+.my-grid td {
+  padding: 8px 12px;
+  border: 1px solid var(--grid-border);
+}
+
+/* Zebra rows */
+.my-grid tbody tr:nth-child(even) td {
+  background-color: var(--grid-row-alt-bg);
+}
+
+/* Hover */
+.my-grid tbody tr:hover td {
+  background-color: var(--grid-row-hover);
+}
+
+/* Estados (Loading / Empty / Error) */
+.my-grid tr.grid-state td {
+  text-align: center;
+  font-style: italic;
+  color: #555;
+  background-color: var(--grid-bg);
 }

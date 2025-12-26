@@ -1,7 +1,48 @@
 .my-grid.theme-dark {
   --grid-bg: #1e1e1e;
   --grid-text: #f0f0f0;
-  --grid-border: #ddd;
+  --grid-border: #555;
   --grid-header-bg: #2a2a2a;
+  --grid-row-alt-bg: #262626;
   --grid-row-hover: #2f2f2f;
+
+  font-family: system-ui, sans-serif;
+  background: var(--grid-bg);
+  color: var(--grid-text);
+  border: 1px solid var(--grid-border);
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* Encabezados */
+.my-grid.theme-dark th {
+  background: var(--grid-header-bg);
+  font-weight: bold;
+  padding: 10px 12px;
+  border: 1px solid var(--grid-border);
+  text-align: left;
+}
+
+/* Celdas */
+.my-grid.theme-dark td {
+  padding: 8px 12px;
+  border: 1px solid var(--grid-border);
+}
+
+/* Zebra rows */
+.my-grid.theme-dark tbody tr:nth-child(even) td {
+  background-color: var(--grid-row-alt-bg);
+}
+
+/* Hover */
+.my-grid.theme-dark tbody tr:hover td {
+  background-color: var(--grid-row-hover);
+}
+
+/* Estados (Loading / Empty / Error) */
+.my-grid.theme-dark tr.grid-state td {
+  text-align: center;
+  font-style: italic;
+  color: #ccc;
+  background-color: var(--grid-bg);
 }
