@@ -21,25 +21,29 @@ export class DataGrid {
       ThemeManager.setTheme(theme);
     }
 
+    this.container.classList.add("my-grid");
     ThemeManager.applyTheme(this.container);
+
 
     this.table = document.createElement("table");
     this.table.className = "data-grid";
     this.container.innerHTML = "";
     this.container.appendChild(this.table);
 
-    // Subscribirse a eventos
     EventBus.subscribe(GRID_EVENTS.LOADING, () => this.renderLoading());
     EventBus.subscribe(GRID_EVENTS.DATA_LOADED, data => this.renderTable(data));
     EventBus.subscribe(GRID_EVENTS.DATA_ERROR, error => this.renderError(error));
 
-    // 🔹 Dataset directo → publica evento
+    if (data && url) {
+      this.renderState("Provide either data or url, not both");
+      return;
+    }
+
     if (data) {
       EventBus.publish(GRID_EVENTS.DATA_LOADED, data);
       return;
     }
 
-    // 🔹 URL → solicita datos
     if (url) {
       EventBus.publish(GRID_EVENTS.REQUEST_DATA, {
         url,
@@ -52,27 +56,32 @@ export class DataGrid {
   }
 
   renderLoading() {
-    this.table.innerHTML = `
-      <tbody>
-        <tr>
-          <td colspan="${this.columns.length}">
-            Loading...
-          </td>
-        </tr>
-      </tbody>
-    `;
+    this.renderState("Loading...");
   }
 
+
   renderError(error) {
+    const message =
+      error?.message ||
+      error?.error ||
+      error ||
+      "Error loading data";
+
+    this.renderState(`Error: ${message}`);
+  }
+
+  renderState(message) {
+    const colSpan = this.columns.length || 1;
+
     this.table.innerHTML = `
-      <tbody>
-        <tr>
-          <td colspan="${this.columns.length}">
-            Error: ${error.message}
-          </td>
-        </tr>
-      </tbody>
-    `;
+    <tbody>
+      <tr class="grid-state">
+        <td colspan="${colSpan}">
+          ${message}
+        </td>
+      </tr>
+    </tbody>
+  `;
   }
 
   renderTable(data) {
@@ -95,29 +104,28 @@ export class DataGrid {
     this.table.appendChild(thead);
   }
 
+  renderEmpty() {
+    this.renderState("No data available");
+  }
+
   renderBody(data) {
-    const tbody = document.createElement("tbody");
-
     if (!data || data.length === 0) {
-      const tr = document.createElement("tr");
-      const td = document.createElement("td");
-      td.colSpan = this.columns.length;
-      td.textContent = "No data";
-      tr.appendChild(td);
-      tbody.appendChild(tr);
-    } else {
-      data.forEach(row => {
-        const tr = document.createElement("tr");
-
-        this.columns.forEach(col => {
-          const td = document.createElement("td");
-          td.textContent = row[col.field];
-          tr.appendChild(td);
-        });
-
-        tbody.appendChild(tr);
-      });
+      this.renderEmpty()
+      return;
     }
+
+    const tbody = document.createElement("tbody");
+    data.forEach(row => {
+      const tr = document.createElement("tr");
+
+      this.columns.forEach(col => {
+        const td = document.createElement("td");
+        td.textContent = row[col.field];
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
 
     this.table.appendChild(tbody);
   }

@@ -11,13 +11,14 @@ A lightweight JavaScript grid library with theming, events and remote data suppo
 
 ```html
 <script type="module">
-  import { MyGrid } from "./index.js";
+  import { MyGrid, GRID_THEMES } from "./useComponents.js";
 </script>
+
 ```
 ## Use
 ```html
 <script type="module">
-import { MyGrid, GRID_THEMES } from "./index.js";
+import { MyGrid, GRID_THEMES } from "./useComponents.js";
 
 MyGrid.create({
   target: "#grid",

@@ -6,7 +6,14 @@ export const ThemeManager = (() => {
   }
 
   function applyTheme(element) {
-    element.classList.add("my-grid");
+    if (!element) return;
+
+    // Limpiar temas anteriores
+    [...element.classList]
+      .filter(cls => cls.startsWith("theme-"))
+      .forEach(cls => element.classList.remove(cls));
+
+    // Aplicar tema actual
     element.classList.add(`theme-${currentTheme}`);
   }
 
