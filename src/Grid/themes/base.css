@@ -96,3 +96,11 @@
     transform: rotate(360deg);
   }
 }
+
+.my-grid .grid-row-clickable {
+  cursor: pointer;
+}
+
+.my-grid .grid-row-clickable:hover td {
+  background-color: var(--grid-row-hover);
+}

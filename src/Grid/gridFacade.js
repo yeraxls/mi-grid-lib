@@ -20,7 +20,8 @@ export const MyGrid = (() => {
     data,
     url,
     mapResponse,
-    theme = GRID_THEMES.LIGHT
+    theme = GRID_THEMES.LIGHT,
+    onRowClick
   }) {
     ensureApi();
 
@@ -34,7 +35,8 @@ export const MyGrid = (() => {
       columns,
       data,
       url,
-      urlOptions
+      urlOptions,
+      onRowClick
     });
   }
 

@@ -1,37 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
-    <div id="grid"></div>
+  <div id="grid"></div>
 
-<script type="module">
-   import { MyGrid, GRID_THEMES } from "./useComponents.js";
-  
-// MyGrid.setTheme("dark");
+  <script type="module">
+    import { MyGrid, GRID_THEMES } from "./useComponents.js";
 
-MyGrid.create({
-  target: "#grid",
-  columns: [
-    { field: "name", label: "Nombre" },
-    { field: "url", label: "URL" },
-    { field: "PRueba", label: "PRUEBA" }
-  ],
-  url: "https://pokeapi.co/api/v2/pokemon",
-  mapResponse: r => r.results,
-  // theme: GRID_THEMES.LIGHT
-  // theme: GRID_THEMES.MATERIAL
-  // theme: GRID_THEMES.DARK
-  // theme: GRID_THEMES.BLUE
-  // theme: GRID_THEMES.BLUE_CLASSIC
-  theme: GRID_THEMES.BLUE_DEEP
-});
-</script>
+    // MyGrid.setTheme("dark");
+
+    MyGrid.create({
+      target: "#grid",
+      columns: [
+        { field: "name", label: "Nombre" },
+        {
+          field: "url",
+          label: "URL",
+          render: (value, row) => {
+            const a = document.createElement("a");
+            a.href = value;
+            a.textContent = "Ver";
+            a.target = "_blank";
+            return a;
+          }
+        },
+        { field: "PRueba", label: "PRUEBA" }
+      ],
+      url: "https://pokeapi.co/api/v2/pokemon",
+      mapResponse: r => r.results,
+      // theme: GRID_THEMES.LIGHT
+      // theme: GRID_THEMES.MATERIAL
+      // theme: GRID_THEMES.DARK
+      // theme: GRID_THEMES.BLUE
+      // theme: GRID_THEMES.BLUE_CLASSIC
+      theme: GRID_THEMES.BLUE_DEEP,
+      onRowClick: (rowData) => {
+        console.log(rowData);
+      }
+    });
+  </script>
 
 
 
 </body>
+
 </html>

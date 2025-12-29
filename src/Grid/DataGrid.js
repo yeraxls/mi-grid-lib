@@ -3,10 +3,11 @@ import { GRID_EVENTS } from "./GRID_EVENTS.js";
 import { ThemeManager } from "../core/ThemeManager.js";
 
 export class DataGrid {
-  constructor({ target, columns = [], data, url, urlOptions = {}, theme }) {
+  constructor({ target, columns = [], data, url, urlOptions = {}, theme, onRowClick }) {
     this.columns = columns;
     this.url = url;
     this.urlOptions = urlOptions;
+    this.onRowClick = onRowClick
 
     this.container =
       typeof target === "string"
@@ -55,8 +56,8 @@ export class DataGrid {
     throw new Error("DataGrid requires data or url");
   }
 
-renderLoading() {
-  this.table.innerHTML = `
+  renderLoading() {
+    this.table.innerHTML = `
     <tbody>
       <tr class="grid-state loading">
         <td colspan="${this.columns.length || 1}">
@@ -68,7 +69,7 @@ renderLoading() {
       </tr>
     </tbody>
   `;
-}
+  }
 
 
 
@@ -103,7 +104,7 @@ renderLoading() {
   }
 
   renderHeader() {
-    const colsNum = 100/this.columns.length
+    const colsNum = 100 / this.columns.length
     const thead = document.createElement("thead");
     const tr = document.createElement("tr");
 
@@ -122,25 +123,59 @@ renderLoading() {
     this.renderState("No data available");
   }
 
-  renderBody(data) {
-    if (!data || data.length === 0) {
-      this.renderEmpty()
-      return;
-    }
-
-    const tbody = document.createElement("tbody");
-    data.forEach(row => {
-      const tr = document.createElement("tr");
-
-      this.columns.forEach(col => {
-        const td = document.createElement("td");
-        td.textContent = row[col.field];
-        tr.appendChild(td);
-      });
-
-      tbody.appendChild(tr);
-    });
-
-    this.table.appendChild(tbody);
+ renderBody(data) {
+  // Si no hay datos, mostramos estado vacío
+  if (!data || data.length === 0) {
+    this.renderEmpty();
+    return;
   }
+
+  const tbody = document.createElement("tbody");
+
+  data.forEach(row => {
+    const tr = this.createRow(row);
+    tbody.appendChild(tr);
+  });
+
+  this.table.appendChild(tbody);
+}
+
+/** Crea un <tr> completo para una fila */
+createRow(row) {
+  const tr = document.createElement("tr");
+
+  // Row click
+  if (typeof this.onRowClick === "function") {
+    tr.classList.add("grid-row-clickable");
+    tr.addEventListener("click", event => this.onRowClick(row, event));
+  }
+
+  // Column cells
+  this.columns.forEach(col => {
+    tr.appendChild(this.createCell(col, row));
+  });
+
+  return tr;
+}
+
+/** Crea un <td> según columna y datos de fila */
+createCell(col, row) {
+  const td = document.createElement("td");
+  const value = row[col.field];
+
+  if (typeof col.render === "function") {
+    const rendered = col.render(value, row);
+
+    if (rendered instanceof HTMLElement) {
+      td.appendChild(rendered);
+    } else {
+      td.textContent = rendered ?? "";
+    }
+  } else {
+    td.textContent = value ?? "";
+  }
+
+  return td;
+}
+
 }
