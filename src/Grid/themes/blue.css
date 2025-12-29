@@ -1,12 +1,12 @@
-.my-grid.theme-light {
+.my-grid.theme-blue {
   /* Variables */
-  --grid-bg: #ffffff;
-  --grid-text: #1a1a1a;
-  --grid-border: #d6d6d6;
-  --grid-header-bg: #f5f5f5;
-  --grid-row-alt-bg: #fafafa;
-  --grid-row-hover: #f0f0f0;
-  --grid-muted-text: #666;
+  --grid-bg: #f9fbff;
+  --grid-text: #0f172a;          /* azul muy oscuro */
+  --grid-border: #c7d2fe;        /* azul suave */
+  --grid-header-bg: #e0e7ff;     /* header azul claro */
+  --grid-row-alt-bg: #f1f5ff;
+  --grid-row-hover: #e0e7ff;
+  --grid-muted-text: #475569;    /* azul grisáceo */
 
   background: var(--grid-bg);
   color: var(--grid-text);
@@ -14,40 +14,40 @@
 }
 
 /* Encabezados */
-.my-grid.theme-light th {
+.my-grid.theme-blue th {
   background: var(--grid-header-bg);
   color: var(--grid-text);
   border-bottom-color: var(--grid-border);
 }
 
 /* Celdas */
-.my-grid.theme-light td {
+.my-grid.theme-blue td {
   border-bottom-color: var(--grid-border);
 }
 
 /* Zebra rows */
-.my-grid.theme-light tbody tr:nth-child(even) td {
+.my-grid.theme-blue tbody tr:nth-child(even) td {
   background-color: var(--grid-row-alt-bg);
 }
 
 /* Hover */
-.my-grid.theme-light tbody tr:hover td {
+.my-grid.theme-blue tbody tr:hover td {
   background-color: var(--grid-row-hover);
 }
 
 /* Estados (Loading / Empty / Error) */
-.my-grid.theme-light tr.grid-state td {
+.my-grid.theme-blue tr.grid-state td {
   color: var(--grid-muted-text);
   background-color: var(--grid-bg);
 }
 
 /* Loading */
-.my-grid.theme-light .grid-loading {
+.my-grid.theme-blue .grid-loading {
   color: var(--grid-muted-text);
 }
 
 /* Spinner */
-.my-grid.theme-light .spinner {
+.my-grid.theme-blue .spinner {
   border-color: var(--grid-border);
   border-top-color: transparent;
 }

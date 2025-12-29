@@ -1,0 +1,40 @@
+.my-grid.theme-blue-soft {
+  --grid-bg: #fcfdff;
+  --grid-text: #1e293b;
+  --grid-border: #dbeafe;
+  --grid-header-bg: #eff6ff;
+  --grid-row-alt-bg: #f8fafc;
+  --grid-row-hover: #eff6ff;
+  --grid-muted-text: #64748b;
+
+  background: var(--grid-bg);
+  color: var(--grid-text);
+  border-color: var(--grid-border);
+}
+
+.my-grid.theme-blue-soft th {
+  background: var(--grid-header-bg);
+  border-bottom-color: var(--grid-border);
+}
+
+.my-grid.theme-blue-soft td {
+  border-bottom-color: var(--grid-border);
+}
+
+.my-grid.theme-blue-soft tbody tr:nth-child(even) td {
+  background-color: var(--grid-row-alt-bg);
+}
+
+.my-grid.theme-blue-soft tbody tr:hover td {
+  background-color: var(--grid-row-hover);
+}
+
+.my-grid.theme-blue-soft tr.grid-state td,
+.my-grid.theme-blue-soft .grid-loading {
+  color: var(--grid-muted-text);
+}
+
+.my-grid.theme-blue-soft .spinner {
+  border-color: var(--grid-border);
+  border-top-color: transparent;
+}

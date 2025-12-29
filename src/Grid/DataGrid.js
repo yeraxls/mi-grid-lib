@@ -55,9 +55,21 @@ export class DataGrid {
     throw new Error("DataGrid requires data or url");
   }
 
-  renderLoading() {
-    this.renderState("Loading...");
-  }
+renderLoading() {
+  this.table.innerHTML = `
+    <tbody>
+      <tr class="grid-state loading">
+        <td colspan="${this.columns.length || 1}">
+          <div class="grid-loading">
+            <span class="spinner"></span>
+            Loading...
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  `;
+}
+
 
 
   renderError(error) {
@@ -91,12 +103,14 @@ export class DataGrid {
   }
 
   renderHeader() {
+    const colsNum = 100/this.columns.length
     const thead = document.createElement("thead");
     const tr = document.createElement("tr");
 
     this.columns.forEach(col => {
       const th = document.createElement("th");
       th.textContent = col.label || col.field;
+      th.style.width = `${colsNum}%`
       tr.appendChild(th);
     });
 

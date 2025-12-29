@@ -17,13 +17,17 @@ MyGrid.create({
   target: "#grid",
   columns: [
     { field: "name", label: "Nombre" },
-    { field: "url", label: "URL" }
+    { field: "url", label: "URL" },
+    { field: "PRueba", label: "PRUEBA" }
   ],
   url: "https://pokeapi.co/api/v2/pokemon",
   mapResponse: r => r.results,
   // theme: GRID_THEMES.LIGHT
   // theme: GRID_THEMES.MATERIAL
-  theme: GRID_THEMES.DARK
+  // theme: GRID_THEMES.DARK
+  // theme: GRID_THEMES.BLUE
+  // theme: GRID_THEMES.BLUE_CLASSIC
+  theme: GRID_THEMES.BLUE_DEEP
 });
 </script>
 

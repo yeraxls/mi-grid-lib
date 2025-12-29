@@ -1,32 +1,28 @@
 .my-grid.theme-dark {
+  /* Variables */
   --grid-bg: #1e1e1e;
   --grid-text: #f0f0f0;
-  --grid-border: #555;
+  --grid-border: #3a3a3a;
   --grid-header-bg: #2a2a2a;
-  --grid-row-alt-bg: #262626;
+  --grid-row-alt-bg: #242424;
   --grid-row-hover: #2f2f2f;
+  --grid-muted-text: #aaa;
 
-  font-family: system-ui, sans-serif;
   background: var(--grid-bg);
   color: var(--grid-text);
-  border: 1px solid var(--grid-border);
-  border-collapse: collapse;
-  width: 100%;
+  border-color: var(--grid-border);
 }
 
 /* Encabezados */
 .my-grid.theme-dark th {
   background: var(--grid-header-bg);
-  font-weight: bold;
-  padding: 10px 12px;
-  border: 1px solid var(--grid-border);
-  text-align: left;
+  color: var(--grid-text);
+  border-bottom-color: var(--grid-border);
 }
 
 /* Celdas */
 .my-grid.theme-dark td {
-  padding: 8px 12px;
-  border: 1px solid var(--grid-border);
+  border-bottom-color: var(--grid-border);
 }
 
 /* Zebra rows */
@@ -41,8 +37,17 @@
 
 /* Estados (Loading / Empty / Error) */
 .my-grid.theme-dark tr.grid-state td {
-  text-align: center;
-  font-style: italic;
-  color: #ccc;
+  color: var(--grid-muted-text);
   background-color: var(--grid-bg);
+}
+
+/* Loading */
+.my-grid.theme-dark .grid-loading {
+  color: var(--grid-muted-text);
+}
+
+/* Spinner */
+.my-grid.theme-dark .spinner {
+  border-color: var(--grid-border);
+  border-top-color: transparent;
 }
