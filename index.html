@@ -18,7 +18,7 @@
     MyGrid.create({
       target: "#grid",
       columns: [
-        { field: "name", label: "Nombre" },
+        { field: "name", label: "Nombre", sortable: true },
         {
           field: "url",
           label: "URL",
@@ -28,20 +28,25 @@
             a.textContent = "Ver";
             a.target = "_blank";
             return a;
-          }
+          },
+          sortable: false
         },
-        { field: "PRueba", label: "PRUEBA" }
+        { field: "PRueba", label: "PRUEBA", sortable: true }
       ],
+      // data:[],
       url: "https://pokeapi.co/api/v2/pokemon",
       mapResponse: r => r.results,
-      // theme: GRID_THEMES.LIGHT
-      // theme: GRID_THEMES.MATERIAL
-      // theme: GRID_THEMES.DARK
-      // theme: GRID_THEMES.BLUE
-      // theme: GRID_THEMES.BLUE_CLASSIC
-      theme: GRID_THEMES.BLUE_DEEP,
+      // theme: GRID_THEMES.LIGHT,
+      // theme: GRID_THEMES.MATERIAL,
+      theme: GRID_THEMES.DARK,
+      // theme: GRID_THEMES.BLUE,
+      // theme: GRID_THEMES.BLUE_CLASSIC,
+      // theme: GRID_THEMES.BLUE_DEEP,
       onRowClick: (rowData) => {
         console.log(rowData);
+      },
+      onSort: (column, direction) => {
+        console.log(column, direction);
       }
     });
   </script>

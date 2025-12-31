@@ -104,3 +104,41 @@
 .my-grid .grid-row-clickable:hover td {
   background-color: var(--grid-row-hover);
 }
+
+.my-grid th.grid-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.my-grid th.grid-sortable:hover {
+  background-color: var(--grid-row-hover);
+}
+
+/* =========================
+   Sorting indicators
+========================= */
+
+.my-grid th.grid-sortable {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-right: 24px;
+}
+
+.my-grid th.grid-sortable::after {
+  content: "⇅";
+  position: absolute;
+  right: 8px;
+  opacity: 0.3;
+  font-size: 12px;
+}
+
+.my-grid th.grid-sorted.grid-sort-asc::after {
+  content: "▲";
+  opacity: 1;
+}
+
+.my-grid th.grid-sorted.grid-sort-desc::after {
+  content: "▼";
+  opacity: 1;
+}

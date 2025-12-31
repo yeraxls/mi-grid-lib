@@ -51,3 +51,7 @@
   border-color: var(--grid-border);
   border-top-color: transparent;
 }
+
+.my-grid.theme-dark th.grid-sortable::after {
+  color: #aaa;
+}

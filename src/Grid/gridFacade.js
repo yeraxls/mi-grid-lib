@@ -21,7 +21,8 @@ export const MyGrid = (() => {
     url,
     mapResponse,
     theme = GRID_THEMES.LIGHT,
-    onRowClick
+    onRowClick,
+    onSort
   }) {
     ensureApi();
 
@@ -36,7 +37,8 @@ export const MyGrid = (() => {
       data,
       url,
       urlOptions,
-      onRowClick
+      onRowClick,
+      onSort
     });
   }
 
