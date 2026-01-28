@@ -142,3 +142,48 @@
   content: "▼";
   opacity: 1;
 }
+.grid-page-size {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+}
+
+.grid-page-size select {
+  padding: 2px 6px;
+  border: 1px solid var(--grid-border);
+  background: var(--grid-bg);
+  color: var(--grid-text);
+}
+
+.grid-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid var(--grid-border);
+  font-size: 0.85rem;
+  background: var(--grid-bg);
+}
+
+.grid-pagination button {
+  padding: 4px 8px;
+  border: 1px solid var(--grid-border);
+  background: transparent;
+  color: var(--grid-text);
+  cursor: pointer;
+}
+
+.grid-pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.grid-page-size select {
+  padding: 2px 6px;
+  border: 1px solid var(--grid-border);
+  background: var(--grid-bg);
+  color: var(--grid-text);
+}

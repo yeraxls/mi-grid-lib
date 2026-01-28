@@ -22,7 +22,9 @@ export const MyGrid = (() => {
     mapResponse,
     theme = GRID_THEMES.LIGHT,
     onRowClick,
-    onSort
+    onSort,
+    pageSize,
+    pageSizeOptions
   }) {
     ensureApi();
 
@@ -38,7 +40,9 @@ export const MyGrid = (() => {
       url,
       urlOptions,
       onRowClick,
-      onSort
+      onSort,
+      pageSize,
+      pageSizeOptions
     });
   }
 
