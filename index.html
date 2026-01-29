@@ -18,7 +18,15 @@
     MyGrid.create({
       target: "#grid",
       columns: [
-        { field: "name", label: "Nombre", sortable: true },
+        {
+          field: "name",
+          label: "Nombre",
+          sortable: true,
+          filterable: true,
+          width: "40%",     // px, %, rem
+          // minWidth: "120px",  // opcional
+          // maxWidth: "300px"   // opcional
+        },
         {
           field: "url",
           label: "URL",
@@ -29,9 +37,19 @@
             a.target = "_blank";
             return a;
           },
-          sortable: false
+          sortable: false,
+          width: "10%",     // px, %, rem
+          // minWidth: "120px",  // opcional
+          // maxWidth: "300px"   // opcional
         },
-        { field: "PRueba", label: "PRUEBA", sortable: true }
+        { 
+          field: "PRueba",
+          label: "PRUEBA",
+          sortable: true,
+          width: "30%",     // px, %, rem
+          // minWidth: "120px",  // opcional
+          // maxWidth: "300px"   // opcional
+        }
       ],
       // data:[],
       url: "https://pokeapi.co/api/v2/pokemon",

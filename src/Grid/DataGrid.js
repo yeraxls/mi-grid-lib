@@ -26,13 +26,19 @@ export class DataGrid {
      * ====================== */
     this.sortState = {
       field: null,
-      direction: null // 'asc' | 'desc' | null
+      direction: null
     };
+
+    /* ======================
+     * Filter state
+     * ====================== */
+    this.columnFilters = {};
 
     /* ======================
      * Data state
      * ====================== */
     this.originalData = [];
+    this.filteredData = [];
     this.currentData = [];
 
     /* ======================
@@ -76,9 +82,7 @@ export class DataGrid {
 
     EventBus.subscribe(GRID_EVENTS.DATA_LOADED, data => {
       this.originalData = Array.isArray(data) ? data : [];
-      this.currentData = [...this.originalData];
-      this.currentPage = 1;
-      this.renderTable(this.currentData);
+      this.applyFilters();
     });
 
     EventBus.subscribe(GRID_EVENTS.DATA_ERROR, error =>
@@ -156,21 +160,42 @@ export class DataGrid {
    * ====================== */
   renderTable() {
     const totalPages = this.getTotalPages();
-
-    if (this.currentPage > totalPages)
-      this.currentPage = totalPages;
+    if (this.currentPage > totalPages) this.currentPage = totalPages;
 
     this.table.innerHTML = "";
+    this.renderColGroup()
     this.renderHeader();
     this.renderBody(this.getPagedData());
     this.renderFooter();
   }
 
+    /* ======================
+   * ColGroup
+   * ====================== */
+  renderColGroup() {
+    const colgroup = document.createElement("colgroup");
 
+    this.columns.forEach(col => {
+      const colEl = document.createElement("col");
 
+      if (col.width) colEl.style.width = col.width;
+      if (col.minWidth) colEl.style.minWidth = col.minWidth;
+      if (col.maxWidth) colEl.style.maxWidth = col.maxWidth;
+
+      colgroup.appendChild(colEl);
+    });
+
+    this.table.appendChild(colgroup);
+  }
+
+  /* ======================
+   * Header
+   * ====================== */
   renderHeader() {
     const thead = document.createElement("thead");
-    const tr = document.createElement("tr");
+
+    /* Header labels */
+    const headerRow = document.createElement("tr");
 
     this.columns.forEach(col => {
       const th = document.createElement("th");
@@ -178,10 +203,7 @@ export class DataGrid {
 
       if (col.sortable) {
         th.classList.add("grid-sortable");
-
-        th.addEventListener("click", () => {
-          this.toggleSort(col);
-        });
+        th.addEventListener("click", () => this.toggleSort(col));
 
         if (this.sortState.field === col.field) {
           th.classList.add("grid-sorted");
@@ -189,11 +211,57 @@ export class DataGrid {
         }
       }
 
-      tr.appendChild(th);
+      headerRow.appendChild(th);
     });
 
-    thead.appendChild(tr);
+    thead.appendChild(headerRow);
+
+    /* Filter row */
+    const filterRow = document.createElement("tr");
+    filterRow.className = "grid-filter-row";
+
+    this.columns.forEach(col => {
+      const th = document.createElement("th");
+
+      if (col.filterable && col.filterable !== false) {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Filter...";
+        input.value = this.columnFilters[col.field] || "";
+
+        input.addEventListener("input", e => {
+          this.columnFilters[col.field] = e.target.value;
+          this.currentPage = 1;
+          this.applyFilters();
+        });
+
+        th.appendChild(input);
+      }
+
+      filterRow.appendChild(th);
+    });
+
+    thead.appendChild(filterRow);
     this.table.appendChild(thead);
+  }
+
+  /* ======================
+   * Filtering
+   * ====================== */
+  applyFilters() {
+    this.filteredData = this.originalData.filter(row =>
+      this.columns.every(col => {
+        const filterValue = this.columnFilters[col.field];
+        if (!filterValue) return true;
+
+        const cellValue = row[col.field];
+        return String(cellValue ?? "")
+          .toLowerCase()
+          .includes(filterValue.toLowerCase());
+      })
+    );
+
+    this.applySorting();
   }
 
   /* ======================
@@ -221,13 +289,12 @@ export class DataGrid {
     const { field, direction } = this.sortState;
 
     if (!field || !direction) {
-      this.currentData = [...this.originalData];
-      this.currentPage = 1;
+      this.currentData = [...this.filteredData];
       this.renderTable();
       return;
     }
 
-    const sorted = [...this.originalData].sort((a, b) => {
+    this.currentData = [...this.filteredData].sort((a, b) => {
       const A = a[field];
       const B = b[field];
 
@@ -244,14 +311,17 @@ export class DataGrid {
         : String(B).localeCompare(String(A));
     });
 
-    this.currentData = sorted;
-    this.currentPage = 1;
     this.renderTable();
   }
 
   /* ======================
    * Pagination
    * ====================== */
+  getTotalPages() {
+    if (!this.currentData || this.currentData.length === 0) return 1;
+    return Math.ceil(this.currentData.length / this.pageSize);
+  }
+
   getPagedData() {
     const start = (this.currentPage - 1) * this.pageSize;
     const end = start + this.pageSize;
@@ -285,7 +355,6 @@ export class DataGrid {
     return wrapper;
   }
 
-
   renderFooter() {
     const oldFooter = this.container.querySelector(".grid-footer");
     if (oldFooter) oldFooter.remove();
@@ -299,16 +368,6 @@ export class DataGrid {
 
     this.container.appendChild(footer);
   }
-  getTotalPages() {
-    if (!this.currentData || this.currentData.length === 0) return 1;
-    return Math.ceil(this.currentData.length / this.pageSize);
-  }
-
-  getPagedData() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    return this.currentData.slice(start, end);
-  }
 
   createPaginationControls() {
     const wrapper = document.createElement("div");
@@ -319,72 +378,28 @@ export class DataGrid {
     const prev = document.createElement("button");
     prev.textContent = "‹";
     prev.disabled = this.currentPage === 1;
-
-    prev.addEventListener("click", () => {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-        this.renderTable();
-      }
-    });
-
-    const next = document.createElement("button");
-    next.textContent = "›";
-    next.disabled = this.currentPage === totalPages;
-
-    next.addEventListener("click", () => {
-      if (this.currentPage < totalPages) {
-        this.currentPage++;
-        this.renderTable();
-      }
-    });
-
-    wrapper.append(prev, next);
-    return wrapper;
-  }
-
-
-  createPageInfo() {
-    const info = document.createElement("div");
-    info.className = "grid-page-info";
-
-    info.textContent = `Page ${this.currentPage} of ${this.getTotalPages()}`;
-    return info;
-  }
-
-
-  renderPagination() {
-    const old = this.container.querySelector(".grid-pagination");
-    if (old) old.remove();
-
-    const totalItems = this.currentData.length;
-    const totalPages = Math.ceil(totalItems / this.pageSize);
-
-    if (totalPages <= 1) return;
-
-    const nav = document.createElement("div");
-    nav.className = "grid-pagination";
-
-    const prev = document.createElement("button");
-    prev.textContent = "Prev";
-    prev.disabled = this.currentPage === 1;
     prev.onclick = () => {
       this.currentPage--;
       this.renderTable();
     };
 
     const next = document.createElement("button");
-    next.textContent = "Next";
+    next.textContent = "›";
     next.disabled = this.currentPage === totalPages;
     next.onclick = () => {
       this.currentPage++;
       this.renderTable();
     };
 
-    const info = document.createElement("span");
-    info.textContent = `Page ${this.currentPage} of ${totalPages}`;
+    wrapper.append(prev, next);
+    return wrapper;
+  }
 
-    nav.append(prev, info, next);
-    this.container.appendChild(nav);
+  createPageInfo() {
+    const info = document.createElement("div");
+    info.className = "grid-page-info";
+    info.textContent = `Page ${this.currentPage} of ${this.getTotalPages()}`;
+    return info;
   }
 
   /* ======================
